@@ -7,6 +7,12 @@ Ws.boot()
 Ws.io.on('connection', async (socket) => {
   const { room, userCode, avatar } = socket.data
 
+  /**
+   * ----------------------------
+   * Init
+   * ----------------------------
+   */
+
   const hoster = room.getHostClient()
   if (hoster?.userCode === userCode || room.isExists(userCode)) {
     socket.join(room.name)
@@ -26,6 +32,12 @@ Ws.io.on('connection', async (socket) => {
     })
     socket.to(room.name).emit(`client:joined`, { userCode, avatar, connected: true })
   }
+
+  /**
+   * --------------------------
+   * Joining
+   * --------------------------
+   */
 
   socket.on(`${room.name}:join:request`, ({ answer, sender }) => {
     if (socket.data.userCode !== hoster.userCode) {
@@ -54,6 +66,12 @@ Ws.io.on('connection', async (socket) => {
     room.removeJoinRequest(sender)
   })
 
+  /**
+   * -------------------------
+   * Share files
+   * -------------------------
+   */
+
   socket.on(`${room.name}:share:create`, async ({ files }) => {
     console.log(`User ${userCode} send a file`)
     socket.to(room.name).emit('share:create', { files, sender: userCode })
@@ -67,16 +85,22 @@ Ws.io.on('connection', async (socket) => {
     room.shareSocket.emit(`share:answer`, { accept, receiver: userCode })
   })
 
+  /**
+   * ------------------------
+   * Signal exchange
+   * ------------------------
+   */
+
   socket.on(`${room.name}:signal`, (data) => {
     let receiverData = JSON.parse(data)
     const { receiver } = receiverData
-    console.log('Receive signal from ', userCode, ' and sen to ', receiver)
-    receiverData = {
-      ...receiverData,
-      sender: userCode,
-    }
+    console.log('Receive signal from ', userCode, ' and send to ', receiver)
+
     delete receiverData.receiver
-    socket.to(receiver).emit('signal', receiverData)
+    socket.to(receiver).emit('signal', {
+      sender: userCode,
+      data: { ...receiverData },
+    })
   })
 
   socket.on('disconnect', () => {

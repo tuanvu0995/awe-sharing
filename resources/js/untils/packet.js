@@ -1,6 +1,8 @@
 import Peer from './peer'
 import { downloadFile } from './download'
-import { END_CHUNK, MAX_FILE_CHUNK_SIZE, START_CHUNK } from '../config/constants'
+import { END_OF_FILE_MESSAGE, MAX_FILE_CHUNK_SIZE } from '../config/constants'
+
+const FILE_DOWNLOAD_COMPLETE_MESSAGE = 'FDCM'
 
 class Packet {
   /**
@@ -12,16 +14,20 @@ class Packet {
     this.files = files
     this.receivedBuffers = []
     this.start()
+    console.log(this.peer.type, this.files.length)
   }
 
   start() {
     if (this.peer.isLocal()) {
-      this.peer.onConnect(() => {
-        setTimeout(() => this.files.forEach(this.sendFile), 500)
+      this.sendCompleted = 0
+      this.peer.onConnect(async () => {
+        await this.sendFile(this.files[0])
       })
+      this.onRemoteDownloaded()
     }
 
     if (this.peer.isRemote()) {
+      this.downloaded = 0
       this.peer.onData(this.handleReceive)
     }
   }
@@ -31,25 +37,19 @@ class Packet {
     console.log('Start send file: ', fileName)
     const arrayBuffer = await file.arrayBuffer()
 
-    let index = 0
     for (let i = 0; i < arrayBuffer.byteLength; i += MAX_FILE_CHUNK_SIZE) {
       const endChunk = i + MAX_FILE_CHUNK_SIZE
-      const type = endChunk < arrayBuffer.byteLength ? START_CHUNK : END_CHUNK
       const data = arrayBuffer.slice(i, endChunk)
-      console.log(data)
-      if (type !== END_CHUNK) {
-        this.peer.send(data)
-      } else {
-        this.peer.send(JSON.stringify({ fileName, end: true }))
-      }
-      index++
+      this.peer.send(data)
     }
+
+    this.peer.send(END_OF_FILE_MESSAGE)
 
     console.log(fileName, 'is send completed')
   }
 
   handleReceive = (data) => {
-    if (!data.toString().includes('fileName')) {
+    if (data.toString() !== END_OF_FILE_MESSAGE) {
       this.receivedBuffers.push(data)
     } else {
       const arrayBuffer = this.receivedBuffers.reduce((acc, arrayBuffer) => {
@@ -58,12 +58,25 @@ class Packet {
         tmp.set(new Uint8Array(arrayBuffer), acc.byteLength)
         return tmp
       }, new Uint8Array())
-      const blob = new Blob([arrayBuffer], { type: 'octet/stream' })
-      const { fileName } = JSON.parse(data.toString())
+
+      const blob = new Blob([arrayBuffer])
+      const fileName = this.files[this.downloaded].name
+
       downloadFile(blob, fileName)
+
       this.receivedBuffers.length = 0
-      console.log('File download complete!')
-      this.close()
+      console.log(`${fileName} is download complete!`)
+
+      this.downloaded++
+
+      if (this.downloaded >= this.files.length) {
+        console.log(`${this.downloaded} downloaded!`)
+        this.close()
+      }
+
+      if (this.downloaded < this.files.length) {
+        this.peer.send(FILE_DOWNLOAD_COMPLETE_MESSAGE)
+      }
     }
   }
 
@@ -73,6 +86,19 @@ class Packet {
 
   destroy() {
     delete this
+  }
+
+  async onRemoteDownloaded() {
+    this.peer.onData((data) => {
+      if (data.toString() === FILE_DOWNLOAD_COMPLETE_MESSAGE) {
+        this.sendCompleted++
+        if (this.sendCompleted < this.files.length) {
+          this.sendFile(this.files[this.sendCompleted])
+        } else {
+          console.log(`${this.sendCompleted} were send completed`)
+        }
+      }
+    })
   }
 }
 

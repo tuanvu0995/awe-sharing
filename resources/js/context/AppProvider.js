@@ -7,6 +7,7 @@ import initSocket from '../client'
 import Peer from '../untils/peer'
 import Packet from '../untils/packet'
 import { size } from 'lodash'
+import { logger } from '../untils/logger'
 
 class AppProvider extends React.Component {
   constructor(props) {
@@ -48,18 +49,19 @@ class AppProvider extends React.Component {
 
   initSocket = () => {
     this.socket.on('signal', (data) => {
-      console.log(data)
-      const peer = new Peer(this.socket, {
-        roomName: this.state.roomName,
-        receiver: data.sender,
-        onComplete: this.onComplete.bind(this),
-      }).asRemote()
-      const packet = new Packet(peer)
+      logger('Receive remote signal: ', data)
+
       if (!this.packets[data.sender]) {
-        delete this.packets[data.sender]
+        const peer = new Peer(this.socket, {
+          roomName: this.state.roomName,
+          receiver: data.sender,
+          onComplete: this.onComplete.bind(this),
+        }).asRemote()
+
+        this.packets[data.sender] = new Packet(peer, this.state.requests[data.sender])
       }
-      this.packets[data.sender] = packet
-      this.packets[data.sender].peer.setSignal(data)
+
+      this.packets[data.sender].peer.setSignal(data.data)
     })
 
     this.socket.on(`join:request`, ({ sender }) => {
@@ -80,6 +82,7 @@ class AppProvider extends React.Component {
         receiver,
         onComplete: this.onComplete.bind(this),
       }).asLocal()
+
       const packet = new Packet(peer, this.files)
       this.packets[receiver] = packet
     })

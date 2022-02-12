@@ -6,13 +6,17 @@ import { withAppContext } from '../context/AppContext'
 
 const avatarUrl = 'https://avataaars.io/'
 
+const singleOrMore = (length) => {
+  return length > 0 ? 's' : ''
+}
+
 const getConfirmText = (type, data) => {
   if (!data) {
     return ''
   }
   switch (type) {
     case 'SHARE_REQUEST':
-      return `This user was share ${data.fileCount} file ${
+      return `This user was share ${data.length} file${singleOrMore(data.length)} ${
         data.fileCount > 1 ? 's' : ''
       }. Do you want to receive them?`
     default:
@@ -24,7 +28,7 @@ const Peer = ({ size, client, requests, socket, roomName, setState }) => {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    setShow(Boolean(requests[client.userCode]))
+    setShow(Boolean(requests[client.userCode]) && !Boolean(requests[client.userCode]?.accept))
   }, [requests])
 
   const agreeReceive = () => {
@@ -39,7 +43,7 @@ const Peer = ({ size, client, requests, socket, roomName, setState }) => {
 
   const resetRequest = () => {
     const newRequest = { ...requests }
-    delete newRequest[client.userCode]
+    newRequest[client.userCode].accept = true
     setState({ requests: newRequest })
   }
 

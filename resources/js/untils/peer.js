@@ -12,7 +12,11 @@ class Peer {
     this.receiver = receiver
     this.onComplete = onComplete
 
-    this.connection = new SimplePeer({ initiator, config: webrtcConfiguration })
+    this.connection = new SimplePeer({
+      initiator,
+      config: webrtcConfiguration,
+      channelConfig: { ordered: true, maxPacketLifetime: 0 },
+    })
     this.onSignal()
     this.onConnect()
     this.onClose()
