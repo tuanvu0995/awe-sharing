@@ -1,0 +1,130 @@
+@charset "utf-8";
+@import './common/_common.scss';
+@import '~bulma/bulma';
+
+#app-root {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.drop-area {
+  font-family: sans-serif;
+}
+
+.app-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  position: relative;
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  margin: 20px;
+  padding: 20px;
+  transition-duration: 1ms;
+
+  &.highlight {
+    border-color: purple;
+    background-color: #e1e1e1;
+  }
+
+  .app-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.personal-peer__container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  height: 200px;
+  .title {
+    margin: 1em 0;
+  }
+  p {
+    margin: 0.5em;
+  }
+}
+
+.peer__container {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid transparent;
+  padding: 6px;
+
+  .tag {
+    margin-top: 10px;
+  }
+}
+
+.client-list__container {
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+.app-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.loading {
+  &.is-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.5;
+    &:after {
+      @include loader;
+      position: absolute;
+      top: calc(50% - 2.5em);
+      left: calc(50% - 2.5em);
+      width: 5em;
+      height: 5em;
+      border-width: 0.25em;
+    }
+  }
+}
+
+.tooltip {
+  background-color: white;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 2%);
+
+  .card {
+    border: none;
+    box-shadow: none;
+
+    .card-content {
+      padding: 8px;
+    }
+
+    .card-footer-item {
+      padding: 2px 4px;
+    }
+  }
+
+  .tootip-arrow {
+    background-color: white;
+    &::before {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: inherit;
+      visibility: visible;
+      content: '';
+      transform: rotate(45deg);
+    }
+  }
+}

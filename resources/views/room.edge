@@ -1,0 +1,17 @@
+@layout('layout/master')
+
+@section('body')
+  <div id="app-root"></div>
+@end
+
+@section('script')
+<script>
+  const pageData = {
+    userCode: '{{ userCode }}',
+    token: '{{ token }}',
+    roomId: '{{ room.rid }}',
+    isHost: {{ isHost }},
+    avatar: '{{ avatar.replaceAll('&', ',') }}',
+  }
+</script>
+@end
