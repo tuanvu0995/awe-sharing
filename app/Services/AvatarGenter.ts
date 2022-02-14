@@ -1,5 +1,3 @@
-const URL = `https://avataaars.io/`
-
 const AVATAR_STYLE = `Circle`
 
 const TOP_TYPES = [
