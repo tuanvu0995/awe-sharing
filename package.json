@@ -48,6 +48,7 @@
     "bulma": "^0.9.3",
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
+    "mysql": "^2.18.1",
     "nanoid": "^3.2.0",
     "phc-argon2": "^1.1.2",
     "prop-types": "^15.8.1",
@@ -60,7 +61,6 @@
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
     "source-map-support": "^0.5.21",
-    "sqlite3": "^5.0.2",
     "stream": "npm:readable-stream",
     "webrtc-adapter": "^8.1.1"
   }
