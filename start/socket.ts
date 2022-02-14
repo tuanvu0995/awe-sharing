@@ -55,7 +55,7 @@ Ws.io.on('connection', async (socket) => {
       Ws.io
         .to(room.name)
         .emit(`client:joined`, { userCode: sender, avatar: requestSocket.data.avatar })
-      requestSocket.emit(`clients:list`, {
+      requestSocket.emit(`client:list`, {
         clients: room.getClients(),
       })
       console.log(`Peer ${sender} joined to room ${room.id}`)

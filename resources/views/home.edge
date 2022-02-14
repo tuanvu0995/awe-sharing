@@ -1,34 +1,49 @@
 @layout('layout/master')
 
 @section('body')
-<div class="container">
-    <div class="columns">
-      <div class="column">
-        <div class="hero bg-gray">
-            <div class="hero-body">
-                <h1>Transferring for free everything fast and private.</h1>
-                <p>We've redesigned Google Meet - our highly secure business meeting service - to make it available to everyone at no cost.</p>
-            </div>
-        </div>
-        <div class="button-group">
-            <form action="{{ route('room.create') }}" method="POST">
-                {{ csrfField() }}
-                <div class="mr-2">
-                    <button type="submit" class="button is-primary">
-                        <i class="icon icon-plus"></i>
-                        New transfer room
-                    </button>
-                </div>
-            </form>
-            <div class="field">
-                <div class="control">
-                  <input class="input" type="text" placeholder="Enter room code">
-                </div>
-            </div>
-        </div>
-        <div class="divider"></div>
+<section class="hero is-fullheight is-default is-bold">
+  @include('include/navbar')
+  <div class="hero-body">
+      <div class="container has-text-centered">
+          <div class="columns is-vcentered">
+              <div class="column is-5">
+                  <figure class="image is-4by3">
+                      <img src="https://picsum.photos/800/600/?random" alt="Description">
+                  </figure>
+              </div>
+              <div class="column is-6 is-offset-1">
+                  <h1 class="title is-2">
+                    Transferring for free everything fast and private.
+                  </h1>
+                  <h2 class="subtitle is-5">
+                    We've redesigned Awe Transfer — our highly secure business meeting service — to make it available to everyone at no cost.
+                  </h2>
+                  <br>
+                  <form action="{{ route('room.create') }}" method="POST">
+                    {{ csrfField() }}
+                    <div class="inline-form">
+                        <button type="submit" class="button is-medium is-primary">
+                            <i class="icon icon-plus"></i>
+                            New transfer room
+                        </button>
+                        <div class="field">
+                          <p class="control is-expanded has-icons-right">
+                            <input class="input is-medium" type="text" name="room_code" placeholder="Room code">
+                            <span class="icon is-small is-right">
+                              <i class="fas fa-check"></i>
+                            </span>
+                          </p>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <p>About <a class="is-link" href="/about">Awe Transfer</a></p>
+                </form>
+              </div>
+          </div>
       </div>
-      <div class="column">col-3</div>
-    </div>
+
+      
   </div>
+</section>
+
 @end

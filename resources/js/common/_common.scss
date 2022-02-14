@@ -4,18 +4,21 @@ $pink: #FA7C91;
 $brown: #757763;
 $beige-light: #D0D1CD;
 $beige-lighter: #EFF0EB;
+$alice-blue: #eff5fb;
+$white: #ffffff;
+$tufts-blue: #3e8ed0;
 
 // Update Bulma's global variables
 $family-sans-serif: "Nunito", sans-serif;
 $grey-dark: $brown;
 $grey-light: $beige-light;
-$primary: $purple;
-$link: $pink;
+$primary: $tufts-blue;
+$link: $tufts-blue;
 $widescreen-enabled: true;
 $fullhd-enabled: true;
 
 // Update some of Bulma's component variables
-$body-background-color: $beige-lighter;
+$body-background-color: $white;
 $control-border-width: 2px;
-$input-border-color: transparent;
+$input-border-color: $brown;
 $input-shadow: none;

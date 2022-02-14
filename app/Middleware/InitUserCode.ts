@@ -8,7 +8,7 @@ export default class InitUserCode {
   public async handle({ session }: HttpContextContract, next: () => Promise<void>) {
     // code for middleware goes here. ABOVE THE NEXT CALL
     if (!session.has('user_code')) {
-      const code = nanoid(10)
+      const code = nanoid(5)
       session.put('user_code', code)
       session.put('user_token', Encryption.encrypt(code))
       await Avatar.create({

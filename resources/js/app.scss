@@ -1,6 +1,7 @@
 @charset "utf-8";
 @import './common/_common.scss';
 @import '~bulma/bulma';
+@import "~@creativebulma/bulma-divider";
 
 #app-root {
   display: flex;
@@ -127,4 +128,10 @@
       transform: rotate(45deg);
     }
   }
+}
+
+
+.inline-form {
+  display: flex;
+  justify-content: space-around;
 }

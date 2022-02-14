@@ -13,6 +13,7 @@
     "@adonisjs/assembler": "^5.3.0",
     "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-react": "^7.16.7",
+    "@creativebulma/bulma-divider": "^1.1.0",
     "@symfony/webpack-encore": "^1.8.1",
     "adonis-preset-ts": "^2.1.0",
     "eslint": "^8.7.0",

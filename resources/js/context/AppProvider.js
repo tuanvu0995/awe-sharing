@@ -27,7 +27,7 @@ class AppProvider extends React.Component {
       joinRequests: [],
       files: [],
     }
-    this.socket = initSocket(this.state, this.setState.bind(this))
+    this.socket = initSocket(this.state)
     this.packets = {}
     this.files = []
   }
@@ -48,6 +48,26 @@ class AppProvider extends React.Component {
   }
 
   initSocket = () => {
+    this.socket.on(`client:list`, ({ clients }) => {
+      logger('client:list', { clients })
+      const clientList = clients.filter((client) => client.userCode !== this.state.userCode)
+      this.setState({ clients: clientList })
+    })
+
+    this.socket.on(`client:joined`, ({ userCode, avatar }) => {
+      logger('client:joined', { userCode, clients: this.state.clients })
+      this.setState({
+        clients: [...this.state.clients, { userCode, avatar }],
+      })
+    })
+
+    this.socket.on(`client:disconnected`, ({ userCode }) => {
+      logger('client:disconnected', { userCode })
+      this.setState({
+        clients: [...this.state.clients.filter((client) => client.userCode !== userCode)],
+      })
+    })
+
     this.socket.on('signal', (data) => {
       logger('Receive remote signal: ', data)
 
