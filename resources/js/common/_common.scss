@@ -1,7 +1,7 @@
 // Set your brand colors
 $purple: #8A4D76;
 $pink: #FA7C91;
-$brown: #757763;
+$brown: #dbdbdb;
 $beige-light: #D0D1CD;
 $beige-lighter: #EFF0EB;
 $alice-blue: #eff5fb;
@@ -12,8 +12,8 @@ $tufts-blue: #3e8ed0;
 $family-sans-serif: "Nunito", sans-serif;
 $grey-dark: $brown;
 $grey-light: $beige-light;
-$primary: $tufts-blue;
-$link: $tufts-blue;
+$primary: $purple;
+$link: $pink;
 $widescreen-enabled: true;
 $fullhd-enabled: true;
 
@@ -22,3 +22,7 @@ $body-background-color: $white;
 $control-border-width: 2px;
 $input-border-color: $brown;
 $input-shadow: none;
+
+// Navbar
+
+$navbar-item-color: $link;

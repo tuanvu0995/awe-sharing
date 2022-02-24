@@ -27,7 +27,7 @@ import WsRoom from 'App/Services/WsRoom'
 
 Route.get('/', async ({ view }) => {
   return view.render('home')
-})
+}).as("home")
 
 Route.post('room', async ({ response, session }) => {
   const user = await User.findBy('user_type', 'anonymous')

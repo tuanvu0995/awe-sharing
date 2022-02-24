@@ -20,14 +20,14 @@ const ConfirmDialog = ({ text, onAgree, onCancel }) => {
 }
 
 ConfirmDialog.propTypes = {
-    text: pt.string,
-    onAgree: pt.func,
-    onCancel: pt.func
+  text: pt.string,
+  onAgree: pt.func,
+  onCancel: pt.func,
 }
 
 ConfirmDialog.defaultProps = {
-    onAgree: () => {},
-    onCancel: () => {}
+  onAgree: () => {},
+  onCancel: () => {},
 }
 
 export default ConfirmDialog

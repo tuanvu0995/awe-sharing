@@ -1,12 +1,31 @@
 @charset "utf-8";
 @import './common/_common.scss';
 @import '~bulma/bulma';
-@import "~@creativebulma/bulma-divider";
+@import '~@creativebulma/bulma-divider';
+
+html {
+  overflow: hidden;
+}
 
 #app-root {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 52px);
+}
+
+.is-logo {
+  span {
+    font-weight: bold;
+    font-size: 1.8em;
+  }
+}
+
+.navbar {
+  padding-right: 8px;
+}
+
+.navbar-item {
+  padding: 0.2rem 0.75rem;
 }
 
 .drop-area {
@@ -22,6 +41,7 @@
   border-radius: 20px;
   margin: 20px;
   padding: 20px;
+  margin-top: 6px;
   transition-duration: 1ms;
 
   &.highlight {
@@ -130,8 +150,69 @@
   }
 }
 
-
 .inline-form {
   display: flex;
   justify-content: space-around;
+}
+
+.circular {
+  height: 68px;
+  width: 68px;
+  position: relative;
+}
+.circular .inner {
+  position: absolute;
+  z-index: 6;
+  top: 50%;
+  left: 50%;
+  height: 64px;
+  width: 64px;
+  margin: -32px 0 0 -32px;
+  background: #dde6f0;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.circular .bar {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  -webkit-border-radius: 100%;
+  clip: rect(0px, 68px, 68px, 34px);
+}
+.circle .bar .progress {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  -webkit-border-radius: 100%;
+  clip: rect(0px, 34px, 68px, 0px);
+  background: #4158d0;
+}
+.circle .left .progress {
+  z-index: 1;
+  animation: left 4s linear both;
+}
+@keyframes left {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+.circle .right {
+  transform: rotate(180deg);
+  z-index: 3;
+}
+.circle .right .progress {
+  animation: right 4s linear both;
+  animation-delay: 4s;
+}
+@keyframes right {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }

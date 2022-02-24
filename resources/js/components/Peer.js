@@ -3,6 +3,7 @@ import pt from 'prop-types'
 import Tooltip from '../common/Tooltip'
 import ConfirmDialog from '../common/ConfirmDialog'
 import { withAppContext } from '../context/AppContext'
+import CircleProgress from '../common/CircleProgress'
 
 const avatarUrl = 'https://avataaars.io/'
 
@@ -60,9 +61,11 @@ const Peer = ({ size, client, requests, socket, roomName, setState }) => {
   return (
     <div className="peer__container">
       <Tooltip canShow={show} content={confirmContent()}>
-        <figure className={`image is-${size}x${size}`}>
-          <img className="is-rounded" src={avatarUrl + avatar} />
-        </figure>
+        <CircleProgress radius={34} stroke={4} progress={67}>
+          <figure className={`image is-${size}x${size}`}>
+            <img className="is-rounded" src={avatarUrl + avatar} />
+          </figure>
+        </CircleProgress>
       </Tooltip>
       <span className="tag is-dark">{client.userCode}</span>
     </div>
