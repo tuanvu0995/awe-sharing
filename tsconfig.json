@@ -31,7 +31,8 @@
       "@adonisjs/lucid",
       "@adonisjs/auth",
       "@adonisjs/shield",
-      "@adonisjs/session"
+      "@adonisjs/session",
+      "@adonisjs/ally"
     ]
   }
 }

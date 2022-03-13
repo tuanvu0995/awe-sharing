@@ -7,13 +7,20 @@ export default class UsersSchema extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('uid').notNullable().unique()
-      table.string('username').notNullable().index()
       table.string('email', 255).notNullable()
-      table.string('password', 180).notNullable()
+      table.string('password', 180).nullable()
+      table.string('name').notNullable()
       table.string('remember_me_token').nullable()
       table.string('user_type').defaultTo('member')
       table.string('account_status').defaultTo('pending')
       table.boolean('deleted').defaultTo(false)
+
+      table.string('avatar').nullable()
+
+      /**
+       * Social meta data
+       */
+      table.string('access_token').nullable()
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
