@@ -1,6 +1,5 @@
 import io from 'socket.io-client'
 import { logger } from './untils/logger'
-import Peer from './untils/peer'
 
 let socket
 
@@ -12,14 +11,10 @@ let socket
  */
 
 function initSocket(state) {
-  if (typeof state.roomId === 'undefined') {
-    return false
-  }
-
-  const { roomId, token } = state
+  const { token } = state
 
   if (!socket) {
-    socket = io({ auth: { token, roomId } })
+    socket = io({ auth: { token } })
   }
 
   /**
@@ -29,7 +24,6 @@ function initSocket(state) {
    */
   socket.on('connect', () => logger(`You'r connected`))
   socket.on('disconnect', () => logger(`You'r disconnected.`))
-  socket.on('join:reject', () => (window.location.href = '/'))
 
   return socket
 }

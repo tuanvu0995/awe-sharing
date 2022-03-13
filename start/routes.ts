@@ -19,22 +19,10 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Avatar from 'App/Models/Avatar'
-import Room from 'App/Models/Room'
-import User from 'App/Models/User'
-import Ws from 'App/Services/Ws'
-import WsRoom from 'App/Services/WsRoom'
 
-Route.get('/', async ({ view, auth }) => {
-  const state = {
-    user: auth.user,
-  }
-  return view.render('home', state)
-}).as('home')
+Route.get('/', 'HomeController.index').as('home')
 
-Route.get('login', ({ view }) => {
-  return view.render('login')
-}).as('login')
+Route.get('login', ({ view }) => view.render('login')).as('login')
 
 Route.group(() => {
   Route.get(':provider/redirect', 'AuthController.redirect').as('redirect')
@@ -43,50 +31,3 @@ Route.group(() => {
 })
   .as('auth')
   .prefix('auth')
-
-Route.post('room', async ({ response, session }) => {
-  const user = await User.findBy('user_type', 'anonymous')
-  const room = await user?.related('rooms').create({ userCode: session.get('user_code') })
-  if (!room) {
-    return response.status(403).json({ message: 'bad request' })
-  }
-
-  return response.redirect().toRoute('room.detail', { rid: room.rid })
-}).as('room.create')
-
-Route.get('r/:rid', async ({ request, view, response, session }) => {
-  const rid = request.param('rid')
-  if (!rid) {
-    return response.status(403).json({ message: 'bad request' })
-  }
-  const room = await Room.findByOrFail('rid', rid)
-  const userCode = session.get('user_code')
-  const userToken = session.get('user_token')
-  const isHost = room.userCode === userCode
-  const avatar = await Avatar.findBy('user_code', userCode)
-  const avatarData = avatar?.data || ''
-
-  if (!Ws.isRoomExists(room.rid)) {
-    const wsRoom = new WsRoom(room.rid)
-    Ws.addRoom(wsRoom)
-  }
-
-  if (isHost) {
-    const wsRoom = Ws.getRoom(room.rid)
-    wsRoom.addClient({
-      userCode,
-      avatar: avatarData,
-      isHost,
-      connected: false,
-    })
-  }
-
-  return view.render('room', {
-    room: room.toJSON(),
-    userCode,
-    isHost,
-    avatar: avatarData,
-    token: userToken,
-    title: userCode,
-  })
-}).as('room.detail')
