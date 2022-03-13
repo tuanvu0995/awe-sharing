@@ -12,7 +12,7 @@ export default class User extends BaseModel {
   public uid: string
 
   @column()
-  public username: string
+  public name: string
 
   @column()
   public email: string
@@ -31,6 +31,12 @@ export default class User extends BaseModel {
 
   @column()
   public deleted: boolean
+
+  @column()
+  public avatar: string
+
+  @column()
+  public accessToken: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

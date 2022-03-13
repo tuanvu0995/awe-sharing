@@ -25,9 +25,24 @@ import User from 'App/Models/User'
 import Ws from 'App/Services/Ws'
 import WsRoom from 'App/Services/WsRoom'
 
-Route.get('/', async ({ view }) => {
-  return view.render('home')
-}).as("home")
+Route.get('/', async ({ view, auth }) => {
+  const state = {
+    user: auth.user,
+  }
+  return view.render('home', state)
+}).as('home')
+
+Route.get('login', ({ view }) => {
+  return view.render('login')
+}).as('login')
+
+Route.group(() => {
+  Route.get(':provider/redirect', 'AuthController.redirect').as('redirect')
+  Route.get(':provider/callback', 'AuthController.callback').as('callback')
+  Route.get('logout', 'AuthController.logout').as('logout')
+})
+  .as('auth')
+  .prefix('auth')
 
 Route.post('room', async ({ response, session }) => {
   const user = await User.findBy('user_type', 'anonymous')

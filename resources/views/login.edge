@@ -1,0 +1,25 @@
+@layout('layout/master')
+
+@section('body')
+@include('include/navbar')
+<section class="hero is-fullheight is-center">
+    <div class="hero-body has-text-centered">
+      <div class="login">
+        <form>
+            <a href="{{ route('auth.redirect', {provider: 'google'}) }}" class="button">
+                <span class="icon">
+                <i class="fab fa-google"></i>
+                </span>
+                <span>Login with Google</span>
+            </a>
+          <a href="{{ route('auth.redirect', {provider: 'github'}) }}" class="button">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span>Login with GitHub</span>
+          </a>
+        </form>
+      </div>
+    </div>
+</section>
+@end

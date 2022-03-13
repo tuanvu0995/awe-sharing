@@ -216,3 +216,10 @@ html {
     transform: rotate(180deg);
   }
 }
+
+
+.hero {
+  &.is-center {
+    align-items: center;
+  }
+}
