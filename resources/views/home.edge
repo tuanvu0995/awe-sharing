@@ -2,7 +2,6 @@
 
 @section('body')
 <section class="hero is-fullheight is-default is-bold">
-  @include('include/navbar')
   <div class="hero-body">
       <div class="container has-text-centered">
           <div class="columns is-vcentered">
@@ -19,8 +18,6 @@
                     We've redesigned Awe Transfer — our highly secure business meeting service — to make it available to everyone at no cost.
                   </h2>
                   <br>
-                  <form action="{{ route('room.create') }}" method="POST">
-                    {{ csrfField() }}
                     <div class="inline-form">
                         <button type="submit" class="button is-medium is-primary">
                             <i class="icon icon-plus"></i>
@@ -37,7 +34,6 @@
                     </div>
                     <div class="divider"></div>
                     <p>About <a class="is-link" href="/about">Awe Transfer</a></p>
-                </form>
               </div>
           </div>
       </div>

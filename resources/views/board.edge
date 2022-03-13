@@ -1,18 +1,14 @@
 @layout('layout/master')
 
 @section('body')
-@include('include/navbar')
   <div id="app-root"></div>
 @end
 
 @section('script')
 <script>
   const pageData = {
-    userCode: '{{ userCode }}',
+    user: JSON.parse(`{{{stringify(user)}}}`),
     token: '{{ token }}',
-    roomId: '{{ room.rid }}',
-    isHost: {{ isHost }},
-    avatar: '{{ avatar.replaceAll('&', ',') }}',
   }
 </script>
 @end

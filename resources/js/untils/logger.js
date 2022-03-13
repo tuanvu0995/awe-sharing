@@ -1,6 +1,10 @@
 import { toast } from 'react-toastify'
 
-export const logger = (message, {useToast = false, ...data} = {}) => {
+export const logger = (message, { useToast = false, ...data } = {}) => {
+  if (Object.keys(data).length) {
     console.log('LOG:', message, data)
-    useToast && toast(message)
+  } else {
+    console.log('LOG:', message)
+  }
+  useToast && toast(message)
 }

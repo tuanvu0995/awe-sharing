@@ -24,7 +24,6 @@ Server.middleware.register([
   () => import('@ioc:Adonis/Core/BodyParser'),
   () => import('@ioc:Adonis/Addons/Shield'),
   () => import('App/Middleware/SilentAuth'),
-  () => import('App/Middleware/InitUserCode'),
 ])
 
 /*

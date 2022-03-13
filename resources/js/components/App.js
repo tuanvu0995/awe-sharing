@@ -4,14 +4,11 @@ import { ToastContainer } from 'react-toastify'
 
 import Peer from './Peer'
 
-import FileList from './FileList'
 import { withAppContext } from '../context/AppContext'
-import JoinRequestPopup from './JoinRequestPopup'
 
-const App = ({ clients, userCode, avatar }) => {
+const App = ({ clients, user }) => {
   return (
     <div className="app-container" id="drop-area">
-      <JoinRequestPopup />
       <ToastContainer />
       <div className="client-list__container">
         <div className="columns is-multiline">
@@ -23,7 +20,7 @@ const App = ({ clients, userCode, avatar }) => {
         </div>
       </div>
       <div className="personal-peer__container">
-        <Peer client={{ userCode, avatar: avatar }} />
+        <Peer client={user} />
         <p>Drop file to this windows or click here to select a file</p>
         <h3 className="title is-5">Sharing for someone</h3>
       </div>
@@ -33,8 +30,7 @@ const App = ({ clients, userCode, avatar }) => {
 
 const mapContextToProps = (state) => ({
   clients: state.clients,
-  userCode: state.userCode,
-  avatar: state.avatar,
+  user: state.user,
 })
 
 export default withAppContext(App, mapContextToProps)

@@ -6,25 +6,19 @@ import initSocket from '../client'
 
 import Peer from '../untils/peer'
 import Packet from '../untils/packet'
-import { size } from 'lodash'
 import { logger } from '../untils/logger'
 
 class AppProvider extends React.Component {
   constructor(props) {
     super(props)
-    const { avatar, userCode, roomId, isHost, token } = pageData
+    const { user, token } = pageData
     this.state = {
       clients: [],
-      avatar,
-      userCode,
-      roomId,
-      isHost,
+      user,
       token,
       isReady: false,
-      roomName: 'room:' + roomId,
       isLoading: false,
       requests: {},
-      joinRequests: [],
       files: [],
     }
     this.socket = initSocket(this.state)
@@ -50,21 +44,22 @@ class AppProvider extends React.Component {
   initSocket = () => {
     this.socket.on(`client:list`, ({ clients }) => {
       logger('client:list', { clients })
-      const clientList = clients.filter((client) => client.userCode !== this.state.userCode)
+      const clientList = clients.filter((client) => client.uid !== this.state.user.uid)
       this.setState({ clients: clientList })
     })
 
-    this.socket.on(`client:joined`, ({ userCode, avatar }) => {
-      logger('client:joined', { userCode, clients: this.state.clients })
+    this.socket.on(`client:joined`, (client) => {
+      logger('client:joined', { name: client.name, clients: this.state.clients })
       this.setState({
-        clients: [...this.state.clients, { userCode, avatar }],
+        clients: [...this.state.clients, client],
       })
     })
 
-    this.socket.on(`client:disconnected`, ({ userCode }) => {
-      logger('client:disconnected', { userCode })
+    this.socket.on(`client:disconnected`, ({ uid }) => {
+      const client = this.clients.find((client) => client.uid === uid)
+      logger('client:disconnected', { name: client.name })
       this.setState({
-        clients: [...this.state.clients.filter((client) => client.userCode !== userCode)],
+        clients: [...this.state.clients.filter((client) => client.uid !== uid)],
       })
     })
 
@@ -82,12 +77,6 @@ class AppProvider extends React.Component {
       }
 
       this.packets[data.sender].peer.setSignal(data.data)
-    })
-
-    this.socket.on(`join:request`, ({ sender }) => {
-      this.setState({
-        joinRequests: [...this.state.joinRequests, sender],
-      })
     })
 
     this.socket.on('share:answer', ({ accept, receiver }) => {

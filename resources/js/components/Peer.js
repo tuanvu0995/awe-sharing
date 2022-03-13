@@ -29,7 +29,7 @@ const Peer = ({ size, client, requests, socket, roomName, setState }) => {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    setShow(Boolean(requests[client.userCode]) && !Boolean(requests[client.userCode]?.accept))
+    setShow(Boolean(requests[client.uid]) && !Boolean(requests[client.uid]?.accept))
   }, [requests])
 
   const agreeReceive = () => {
@@ -44,30 +44,29 @@ const Peer = ({ size, client, requests, socket, roomName, setState }) => {
 
   const resetRequest = () => {
     const newRequest = { ...requests }
-    newRequest[client.userCode].accept = true
+    newRequest[client.uid].accept = true
     setState({ requests: newRequest })
   }
 
   const confirmContent = () =>
     show && (
       <ConfirmDialog
-        text={getConfirmText('SHARE_REQUEST', requests[client.userCode])}
+        text={getConfirmText('SHARE_REQUEST', requests[client.uid])}
         onAgree={agreeReceive}
         onCancel={cancelReceive}
       />
     )
 
-  const avatar = client.avatar ? client.avatar.replaceAll(',', '&') : ''
   return (
     <div className="peer__container">
       <Tooltip canShow={show} content={confirmContent()}>
         <CircleProgress radius={34} stroke={4} progress={67}>
           <figure className={`image is-${size}x${size}`}>
-            <img className="is-rounded" src={avatarUrl + avatar} />
+            <img className="is-rounded" src={avatarUrl + client.avatar} />
           </figure>
         </CircleProgress>
       </Tooltip>
-      <span className="tag is-dark">{client.userCode}</span>
+      <span className="tag is-dark">{client.name}</span>
     </div>
   )
 }
