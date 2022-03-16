@@ -1,19 +1,22 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Rooms extends BaseSchema {
-  protected tableName = 'rooms'
+export default class Peers extends BaseSchema {
+  protected tableName = 'peers'
 
-  public async up() {
+  public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.bigIncrements('id')
+      
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.string('rid').unique().notNullable()
-      table.integer('max_connect').defaultTo(1)
-      table.boolean('expired').defaultTo(false)
-      table.boolean('deleted').defaultTo(false)
-      table.text('options').nullable()
+      table
+        .integer('refrerence_id')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
 
-      table.string('user_code').nullable()
+      table.boolean('is_accepted').defaultTo(false)
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
@@ -22,7 +25,7 @@ export default class Rooms extends BaseSchema {
     })
   }
 
-  public async down() {
+  public async down () {
     this.schema.dropTable(this.tableName)
   }
 }

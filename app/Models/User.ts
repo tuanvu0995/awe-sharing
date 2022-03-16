@@ -1,8 +1,14 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, beforeCreate, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  beforeCreate,
+  manyToMany,
+  ManyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import { nanoid } from 'nanoid'
-import Room from './Room'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -44,8 +50,13 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(() => Room)
-  public rooms: HasMany<typeof Room>
+  @manyToMany(() => User, {
+    localKey: 'id',
+    pivotForeignKey: 'user_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'refrerence_id',
+  })
+  public peers: ManyToMany<typeof User>
 
   @beforeSave()
   public static async hashPassword(user: User) {
